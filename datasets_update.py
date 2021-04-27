@@ -48,6 +48,11 @@ def update_resources_url(session, dataset_id, api_key, old_url, new_url):
 	return update.json()['result']
 	
 def update_dataset(session,api_key,ckan_url,organization,old_url,new_url):
+	if organization not in organization_list(session, ckan_url, api_key):
+		print("The organization does not exist, please try again.")
+		close_session() 
+		sys.exit()
+	
 	dataset_list = show_dataset_list(session,organization)
 	for dataset in dataset_list:
 		dataset_id = {'id' : dataset['id']}
@@ -94,13 +99,6 @@ if __name__=="__main__":
 	#new_url='https://simocean.store4EO.com'
 	
 	session = create_session()
-	
-	if organization not in organization_list(session, ckan_url, api_key):
-		print("The organization does not exist, please try again.")
-		close_session() 
-		sys.exit()
-	
-	
 	update_dataset(session,api_key,ckan_url,organization,old_url,new_url)
 	close_session() 
 
